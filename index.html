@@ -3,235 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全能收銀王 - 數量強化版</title>
+    <title>算術收銀員 - 大腦強化版</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --blue: #1976d2;
-            --purple: #7b1fa2;
-            --line-green: #06C755;
-            --bg: #f4f7f6;
-        }
-        body { font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 10px; margin: 0; }
-        .app-card { background: white; padding: 1.2rem; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 450px; text-align: center; display: none; position: relative; }
-        #login-screen { background: white; padding: 2.5rem 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .social-btn { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .google { background: #fff; border: 1px solid #ddd; color: #555; }
-        .fb { background: #1877F2; color: white; }
-        .controls { background: #eceff1; padding: 10px; border-radius: 12px; margin-bottom: 15px; }
-        .qty-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; font-size: 0.9rem; }
-        .qty-btn { width: 30px; height: 30px; border: 1px solid #ccc; background: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .mode-switch { display: flex; gap: 5px; }
-        .mode-btn { flex: 1; padding: 8px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; background: #f8f9fa; font-size: 0.8rem; font-weight: bold; }
-        .mode-btn.active { border-color: var(--purple); background: #f3e5f5; color: var(--purple); }
-        .display-area { background: #f9fbe7; border: 2px dashed var(--primary); border-radius: 1rem; padding: 1rem; margin: 10px 0; text-align: left; min-height: 100px; }
-        .item-row { display: flex; justify-content: space-between; font-size: 1.1rem; margin-bottom: 5px; }
-        .highlight-box { background: #fff8e1; padding: 12px; border-radius: 10px; font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; border: 1px solid #ffe082; color: #333; }
-        .shop-tag { display: inline-block; background: var(--blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 5px; }
-        input[type="number"] { width: 70%; padding: 10px; font-size: 1.8rem; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; text-align: center; }
-        .btn { width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; color: white; margin-top: 5px; }
-        .btn-check { background: var(--primary); }
+        :root { --primary: #2e7d32; --blue: #1976d2; --orange: #ff9800; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', 'PingFang TC', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: flex-start; padding: 20px; margin: 0; min-height: 100vh; }
+        .main-container { display: flex; gap: 20px; width: 100%; max-width: 700px; flex-wrap: wrap; }
+        .sidebar { flex: 0 0 120px; display: flex; flex-direction: column; gap: 15px; }
+        .stat-card { background: #333; color: white; padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .stat-label { font-size: 0.8rem; color: #bbb; margin-bottom: 5px; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--orange); }
+        .app-card { background: white; padding: 1.5rem; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); flex: 1; min-width: 320px; text-align: center; }
+        .header-title { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .control-group { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
+        .label-text { font-size: 0.9rem; color: #666; margin-bottom: 8px; display: block; text-align: left; font-weight: bold; }
+        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .btn-qty-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+        .mode-btn, .qty-btn { padding: 10px 5px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; background: white; font-size: 0.85rem; font-weight: bold; transition: 0.2s; }
+        .mode-btn.active { border-color: var(--blue); background: #e3f2fd; color: var(--blue); }
+        .qty-btn.active { border-color: var(--primary); background: #e8f5e9; color: var(--primary); }
+        .challenge-btn { grid-column: span 4; border-color: var(--orange); color: var(--orange); background: #fff3e0; }
+        .challenge-btn.active { background: var(--orange); color: white; }
+        .receipt-area { background: #fffde7; padding: 20px; border-radius: 10px; text-align: left; border: 1px dashed #bcbbbb; margin-bottom: 20px; position: relative; min-height: 100px; }
+        .receipt-type-tag { position: absolute; top: 5px; right: 10px; font-size: 0.7rem; color: #999; font-weight: bold; }
+        .item-row { display: flex; justify-content: flex-start; margin-bottom: 12px; font-size: 1.2rem; font-weight: bold; color: #333; }
+        .total-row { border-top: 2px solid #555; margin-top: 10px; padding-top: 10px; text-align: right; color: #d32f2f; font-size: 1.3rem; font-weight: bold; }
+        .prompt-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #d32f2f; }
+        input { width: 80%; padding: 12px; font-size: 2rem; border: 3px solid #ddd; border-radius: 12px; margin-bottom: 15px; text-align: center; }
+        .msg { font-size: 1.2rem; font-weight: bold; margin: 10px 0; min-height: 1.8rem; }
+        .action-btn { width: 100%; padding: 1.2rem; font-size: 1.3rem; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; color: white; }
+        .btn-check { background: var(--primary); margin-bottom: 10px; }
         .btn-next { background: var(--blue); display: none; }
-        .btn-share { background: var(--line-green); display: none; margin-top: 10px; }
-        .sound-toggle { position: absolute; top: 10px; right: 10px; font-size: 1.4rem; border: none; background: none; cursor: pointer; }
-        .history-info { font-size: 1rem; color: #2e7d32; background: #e8f5e9; padding: 8px; border-radius: 5px; margin-bottom: 8px; font-weight: bold; }
+        @media (max-width: 500px) { .sidebar { flex-direction: row; flex: 1 1 100%; justify-content: center; } .stat-card { flex: 1; padding: 10px 5px; } }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <h1 style="color: var(--primary); font-size: 1.8rem;">🎮 全能收銀王</h1>
-    <p>輸入挑戰者名稱：</p>
-    <input type="text" id="userNameInput" style="width: 80%; padding: 12px; font-size: 1.2rem; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px;" placeholder="媽媽">
-    <button class="social-btn google" onclick="fakeLogin()">Google 登入</button>
-    <button class="social-btn fb" onclick="fakeLogin()">Facebook 登入</button>
-</div>
-
-<div class="app-card" id="game-screen">
-    <button class="sound-toggle" onclick="toggleMute()" id="muteBtn">🔊</button>
-    
-    <div class="controls">
-        <div class="qty-row">
-            <span>📦 品項最多：</span>
-            <button class="qty-btn" onclick="adjustMaxItems(-1)">-</button>
-            <span id="maxItemDisplay" style="width: 20px;">2</span>
-            <button class="qty-btn" onclick="adjustMaxItems(1)">+</button>
+<div class="main-container">
+    <div class="sidebar" id="sidebar">
+        <div class="stat-card">
+            <div class="stat-label">題次</div>
+            <div class="stat-value" id="s-idx">0/10</div>
         </div>
-        <div class="mode-switch">
-            <button class="mode-btn" id="btn-calc" onclick="switchMode('calc')">加總練習</button>
-            <button class="mode-btn" id="btn-change" onclick="switchMode('change')">找零練習</button>
-            <button class="mode-btn active" id="btn-mixed" onclick="switchMode('mixed')">綜合進階</button>
+        <div class="stat-card">
+            <div class="stat-label">正確</div>
+            <div class="stat-value" id="s-right">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">秒數</div>
+            <div class="stat-value" id="s-time">0</div>
         </div>
     </div>
 
-    <div style="font-weight: bold; color: #666; font-size: 0.9rem; margin-bottom: 5px;">挑戰者：<span id="displayName"></span></div>
-    
-    <div class="stats-bar" style="display:flex; justify-content:space-around; background:#eee; padding:8px; border-radius:10px; font-size: 0.9rem; font-weight: bold;">
-        <span>🏆 積分: <span id="score">0</span></span>
-        <span>🔥 連勝: <span id="combo">0</span></span>
-        <span>⏳ <span id="seconds">0</span>s</span>
+    <div class="app-card">
+        <div class="header-title">🛒 算術收銀員</div>
+        <div class="control-group">
+            <span class="label-text">模式選擇</span>
+            <div class="btn-grid">
+                <button class="mode-btn" id="m-calc" onclick="setMode('calc')">1. 加總</button>
+                <button class="mode-btn" id="m-change" onclick="setMode('change')">2. 找零</button>
+                <button class="mode-btn" id="m-mixed" onclick="setMode('mixed')">3. 進階</button>
+                <button class="mode-btn challenge-btn" id="m-challenge" onclick="startChallenge()">🔥 4. 混合挑戰賽 (10題)</button>
+            </div>
+            <span class="label-text">品項數量上限 (隨機生成 1 ~ X 件)</span>
+            <div class="btn-qty-grid" id="qtyGroup"></div>
+        </div>
+
+        <div class="receipt-area" id="receipt">
+            <div class="receipt-type-tag" id="typeTag">練習模式</div>
+            <div id="itemList"></div>
+            <div id="mixedHistory" style="color:var(--primary); font-weight:bold; margin-top:10px;"></div>
+            <div id="totalDisplay" class="total-row" style="display:none;"></div>
+        </div>
+
+        <div class="prompt-text" id="prompt">請計算總金額：</div>
+        <input type="number" id="userInput" pattern="\d*" inputmode="numeric" placeholder="?">
+        <div class="msg" id="msg"></div>
+
+        <button class="action-btn btn-check" id="checkBtn" onclick="verify()">確認送出</button>
+        <button class="action-btn btn-next" id="nextBtn" onclick="nextQuestion()">下一題 ➜</button>
     </div>
-
-    <div id="shopNameArea"></div>
-    <div class="display-area" id="displayArea"></div>
-    <div id="historyContainer"></div>
-    <div class="highlight-box" id="promptText"></div>
-
-    <input type="number" id="ansInput" placeholder="?" autocomplete="off" inputmode="numeric">
-    <div id="msg" style="margin: 5px 0; font-weight: bold; min-height: 1.2rem;"></div>
-    
-    <button class="btn btn-check" id="checkBtn" onclick="verify()">送出答案</button>
-    <button class="btn btn-next" id="nextBtn" onclick="initGame()">下一題 ➜</button>
-    <button class="btn btn-share" id="shareBtn" onclick="shareToLine()">📢 分享戰績給親戚</button>
 </div>
-
-<audio id="sndCorrect" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
-<audio id="sndWrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"></audio>
 
 <script>
-    let user = "", score = 0, combo = 0, seconds = 0, targetAnswer = 0, timerInterval;
-    let currentMode = 'mixed', maxItems = 2, mixedStep = 1, mixedTotal = 0, mixedPaid = 0, isMuted = false;
-
-    const shopThemes = [
-        { name: "🍜 麵食館", items: [ {n:"牛肉麵",p:130,v:20}, {n:"排骨麵",p:110,v:15}, {n:"小菜",p:40,v:10}, {n:"貢丸湯",p:35,v:5} ] },
-        { name: "🍳 早餐店", items: [ {n:"漢堡",p:55,v:10}, {n:"三明治",p:35,v:5}, {n:"奶茶",p:25,v:5}, {n:"蛋餅",p:30,v:5} ] },
-        { name: "🥤 飲料店", items: [ {n:"珍珠奶茶",p:60,v:10}, {n:"紅茶",p:30,v:5}, {n:"綠茶",p:30,v:5}, {n:"水果茶",p:75,v:15} ] },
-        { name: "✏️ 文具店", items: [ {n:"筆記本",p:45,v:10}, {n:"原子筆",p:15,v:5}, {n:"修正帶",p:55,v:10}, {n:"橡皮擦",p:10,v:2} ] },
-        { name: "🍗 炸雞攤", items: [ {n:"雞排",p:85,v:10}, {n:"甜不辣",p:30,v:5}, {n:"花枝丸",p:35,v:5}, {n:"四季豆",p:40,v:10} ] }
+    const menuItems = [
+        {n:"🍎 蘋果", p:25}, {n:"🍌 香蕉", p:15}, {n:"🥛 牛奶", p:85}, {n:"🍞 土司", p:45},
+        {n:"🥚 雞蛋", p:12}, {n:"🍜 泡麵", p:35}, {n:"🥤 飲料", p:20}, {n:"🍪 餅乾", p:50},
+        {n:"🧴 洗手乳", p:95}, {n:"🍣 壽司", p:180}, {n:"🍫 巧克力", p:40}, {n:"🥣 燕麥", p:110}
     ];
 
-    function fakeLogin() {
-        user = document.getElementById('userNameInput').value.trim() || "挑戰者";
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('game-screen').style.display = 'block';
-        document.getElementById('displayName').innerText = user;
-        initGame();
+    let state = {
+        mode: 'calc', currentChallengeMode: 'calc', qtyLimit: 3, isChallenge: false,
+        idx: 0, right: 0, time: 0, timer: null,
+        target: 0, currentTotal: 0, currentPaid: 0, step: 1
+    };
+
+    const qtyGroup = document.getElementById('qtyGroup');
+    for(let i=1; i<=8; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'qty-btn' + (i === 3 ? ' active' : '');
+        btn.innerText = i;
+        btn.id = 'qty-' + i;
+        btn.onclick = () => setQtyLimit(i);
+        qtyGroup.appendChild(btn);
     }
 
-    function adjustMaxItems(v) {
-        maxItems = Math.max(1, Math.min(6, maxItems + v));
-        document.getElementById('maxItemDisplay').innerText = maxItems;
-        initGame();
+    function setMode(m) {
+        state.mode = m; state.isChallenge = false;
+        clearInterval(state.timer);
+        document.getElementById('sidebar').style.opacity = '0.3';
+        updateUIButtons();
+        generateQuestion();
     }
 
-    function switchMode(m) {
-        currentMode = m;
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + m).classList.add('active');
-        initGame();
+    function setQtyLimit(q) {
+        state.qtyLimit = q;
+        updateUIButtons();
+        generateQuestion();
     }
 
-    function toggleMute() {
-        isMuted = !isMuted;
-        document.getElementById('muteBtn').innerText = isMuted ? "🔇" : "🔊";
+    function updateUIButtons() {
+        document.querySelectorAll('.mode-btn, .challenge-btn').forEach(b => b.classList.remove('active'));
+        if(state.isChallenge) document.getElementById('m-challenge').classList.add('active');
+        else document.getElementById('m-' + state.mode).classList.add('active');
+        document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('qty-' + state.qtyLimit).classList.add('active');
     }
 
-    function initGame() {
-        clearInterval(timerInterval); seconds = 0; mixedStep = 1;
-        document.getElementById('msg').innerText = '';
-        document.getElementById('ansInput').value = '';
-        document.getElementById('ansInput').disabled = false;
-        document.getElementById('checkBtn').style.display = 'block';
-        document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('shareBtn').style.display = 'none';
-        document.getElementById('historyContainer').innerHTML = '';
-        
-        const theme = shopThemes[Math.floor(Math.random()*shopThemes.length)];
-        document.getElementById('shopNameArea').innerHTML = `<span class="shop-tag">${theme.name}</span>`;
-        
-        const display = document.getElementById('displayArea');
-        display.innerHTML = '';
+    function generateQuestion() {
+        let listHtml = '';
         let total = 0;
-        const count = Math.floor(Math.random() * maxItems) + 1;
+        
+        // 核心修正：隨機生成 1 到 state.qtyLimit 個品項
+        const count = Math.floor(Math.random() * state.qtyLimit) + 1;
 
-        let selectedItems = [...theme.items].sort(() => 0.5 - Math.random()).slice(0, count);
-
-        selectedItems.forEach(item => {
-            const realPrice = item.p + (Math.floor(Math.random() * (item.v / 5 + 1)) * 5);
-            // 修正處：找零練習現在也會隨機 1-3 倍數量 (如果是綜合模式則更廣)
-            const q = (Math.floor(Math.random() * 3) + 1); 
-            display.innerHTML += `<div class="item-row"><span>${item.n} ($${realPrice})</span><span>x ${q}</span></div>`;
-            total += (realPrice * q);
-        });
-
-        if (currentMode === 'calc') {
-            document.getElementById('promptText').innerText = `總共多少錢？`;
-            targetAnswer = total;
-        } else {
-            let paid = 0;
-            if (total <= 100) paid = 100;
-            else if (total <= 500) paid = 500;
-            else paid = 1000;
-            // 確保顧客付的錢一定比總價多
-            while (paid < total) {
-                paid += 500;
-            }
-
-            if (currentMode === 'change') {
-                display.innerHTML += `<div style="text-align:right; font-weight:bold; color:red; border-top:1px solid #ccc;">應收 $${total}</div>`;
-                document.getElementById('promptText').innerText = `客付 ${paid}，找多少？`;
-                targetAnswer = paid - total;
-            } else {
-                mixedTotal = total;
-                mixedPaid = paid;
-                document.getElementById('promptText').innerText = `Step 1: 先算總價`;
-                targetAnswer = mixedTotal;
-            }
+        for(let i=0; i<count; i++) {
+            const item = menuItems[Math.floor(Math.random()*menuItems.length)];
+            const q = Math.floor(Math.random()*3)+1;
+            total += item.p * q;
+            // 核心修正：不顯示單項結果，只顯示單價與數量
+            listHtml += `<div class="item-row"><span>${item.n} ($${item.p}) x ${q}</span></div>`;
         }
 
-        timerInterval = setInterval(() => { seconds++; document.getElementById('seconds').innerText = seconds; }, 1000);
-        document.getElementById('ansInput').focus();
+        state.currentTotal = total;
+        state.currentPaid = total <= 100 ? 100 : (total <= 500 ? 500 : Math.ceil(total/500)*500);
+        state.step = 1;
+
+        if(state.isChallenge) {
+            const modes = ['calc', 'change', 'mixed'];
+            state.currentChallengeMode = modes[Math.floor(Math.random()*modes.length)];
+        } else {
+            state.currentChallengeMode = state.mode;
+        }
+
+        state.target = (state.currentChallengeMode === 'change') ? (state.currentPaid - state.currentTotal) : state.currentTotal;
+
+        document.getElementById('itemList').innerHTML = listHtml;
+        document.getElementById('mixedHistory').innerText = '';
+        document.getElementById('userInput').value = '';
+        document.getElementById('msg').innerText = '';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('checkBtn').style.display = 'block';
+
+        const typeLabel = { 'calc': '加總題', 'change': '找零題', 'mixed': '進階題' };
+        document.getElementById('typeTag').innerText = typeLabel[state.currentChallengeMode];
+
+        if(state.currentChallengeMode === 'calc') {
+            document.getElementById('totalDisplay').style.display = 'none';
+            document.getElementById('prompt').innerText = `請計算總金額：`;
+        } else if(state.currentChallengeMode === 'change') {
+            document.getElementById('totalDisplay').style.display = 'block';
+            document.getElementById('totalDisplay').innerText = `應付金額：$${total}`;
+            document.getElementById('prompt').innerText = `客付 $${state.currentPaid}，找多少錢？`;
+        } else if(state.currentChallengeMode === 'mixed') {
+            document.getElementById('totalDisplay').style.display = 'none';
+            document.getElementById('prompt').innerText = "第一步：請先算出總額？";
+            state.target = total;
+        }
     }
 
     function verify() {
-        const val = parseInt(document.getElementById('ansInput').value);
-        if(isNaN(val)) return;
+        const input = parseInt(document.getElementById('userInput').value);
+        if(isNaN(input)) return;
 
-        if (currentMode === 'mixed' && mixedStep === 1) {
-            if (val === targetAnswer) {
-                if(!isMuted) document.getElementById('sndCorrect').play();
-                mixedStep = 2;
-                document.getElementById('historyContainer').innerHTML = `<div class="history-info">✅ 總價確認：$${mixedTotal}</div>`;
-                document.getElementById('ansInput').value = '';
-                document.getElementById('promptText').innerText = `Step 2: 客付 ${mixedPaid} 找多少？`;
-                targetAnswer = mixedPaid - mixedTotal;
-                document.getElementById('ansInput').focus();
-            } else fail();
+        if(input === state.target) {
+            if(state.currentChallengeMode === 'mixed' && state.step === 1) {
+                state.step = 2;
+                state.target = state.currentPaid - state.currentTotal;
+                document.getElementById('mixedHistory').innerText = `✅ 總額 $${state.currentTotal} 正確！`;
+                document.getElementById('prompt').innerText = `第二步：客付 $${state.currentPaid}，找多少？`;
+                document.getElementById('userInput').value = '';
+            } else {
+                state.right++;
+                document.getElementById('msg').innerText = "✅ 答對了！";
+                document.getElementById('msg').style.color = "green";
+                updateStats();
+                showNext();
+            }
         } else {
-            if(val === targetAnswer) success(); else fail();
+            document.getElementById('msg').innerText = "❌ 算錯囉，再算一次！";
+            document.getElementById('msg').style.color = "red";
         }
     }
 
-    function success() {
-        if(!isMuted) document.getElementById('sndCorrect').play();
-        score++; combo++;
-        document.getElementById('msg').style.color = "green";
-        document.getElementById('msg').innerText = "✅ 正確！";
-        finishRound();
-    }
-
-    function fail() {
-        if(!isMuted) document.getElementById('sndWrong').play();
-        combo = 0;
-        document.getElementById('msg').style.color = "red";
-        document.getElementById('msg').innerText = `❌ 答案是 ${targetAnswer}`;
-        finishRound();
-    }
-
-    function finishRound() {
-        clearInterval(timerInterval);
-        document.getElementById('score').innerText = score;
-        document.getElementById('combo').innerText = combo;
-        document.getElementById('ansInput').disabled = true;
+    function showNext() {
         document.getElementById('checkBtn').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'block';
-        document.getElementById('shareBtn').style.display = 'block';
     }
 
-    function shareToLine() {
-        const text = `我是收銀王 ${user}！連續答對 ${score} 題！🔥 你敢挑戰嗎？${window.location.href}`;
-        window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text)}`, '_blank');
+    function nextQuestion() {
+        if(state.isChallenge) {
+            state.idx++;
+            if(state.idx >= 10) {
+                clearInterval(state.timer);
+                alert(`🎊 挑戰完成！\n正確率：${state.right}/10\n總時間：${state.time} 秒`);
+                setMode('calc');
+                return;
+            }
+        }
+        updateStats();
+        generateQuestion();
     }
+
+    function startChallenge() {
+        state.isChallenge = true; state.idx = 0; state.right = 0; state.time = 0;
+        document.getElementById('sidebar').style.opacity = '1';
+        updateUIButtons();
+        updateStats();
+        if(state.timer) clearInterval(state.timer);
+        state.timer = setInterval(() => {
+            state.time++;
+            document.getElementById('s-time').innerText = state.time;
+        }, 1000);
+        generateQuestion();
+    }
+
+    function updateStats() {
+        document.getElementById('s-idx').innerText = state.isChallenge ? (state.idx + 1) + "/10" : "-";
+        document.getElementById('s-right').innerText = state.right;
+    }
+
+    setMode('calc');
 </script>
 </body>
 </html>
