@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>收銀王挑戰賽 - 戰績分享版</title>
+    <title>全能收銀王 - 數量強化版</title>
     <style>
         :root {
             --primary: #2e7d32;
@@ -12,142 +12,112 @@
             --line-green: #06C755;
             --bg: #f4f7f6;
         }
-        body {
-            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg);
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            margin: 0;
-        }
-        .app-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            display: none;
-            position: relative;
-        }
-        /* 登入介面 */
-        #login-screen {
-            background: white;
-            padding: 2.5rem 1.5rem;
-            border-radius: 1.5rem;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .social-btn {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+        body { font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 10px; margin: 0; }
+        .app-card { background: white; padding: 1.2rem; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 450px; text-align: center; display: none; position: relative; }
+        #login-screen { background: white; padding: 2.5rem 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .social-btn { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .google { background: #fff; border: 1px solid #ddd; color: #555; }
         .fb { background: #1877F2; color: white; }
-        
-        /* 排行榜 */
-        .leaderboard {
-            background: #fdf2f2;
-            border: 1px solid #ffcdd2;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 15px;
-            text-align: left;
-        }
-        .leaderboard-title { font-weight: bold; color: #d32f2f; margin-bottom: 5px; }
-
-        /* 遊戲核心樣式 */
-        .display-area { background: #f9fbe7; border: 2px dashed var(--primary); border-radius: 1rem; padding: 1rem; margin: 1rem 0; text-align: left; }
-        .item-row { display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 5px; }
-        .highlight-box { background: #fff8e1; padding: 15px; border-radius: 10px; font-size: 1.4rem; font-weight: bold; margin-bottom: 15px; border: 1px solid #ffe082; }
-        input[type="number"] { width: 80%; padding: 12px; font-size: 2rem; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; text-align: center; }
-        
-        .btn { width: 100%; padding: 1rem; font-size: 1.2rem; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; color: white; margin-top: 5px; }
+        .controls { background: #eceff1; padding: 10px; border-radius: 12px; margin-bottom: 15px; }
+        .qty-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; font-size: 0.9rem; }
+        .qty-btn { width: 30px; height: 30px; border: 1px solid #ccc; background: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .mode-switch { display: flex; gap: 5px; }
+        .mode-btn { flex: 1; padding: 8px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; background: #f8f9fa; font-size: 0.8rem; font-weight: bold; }
+        .mode-btn.active { border-color: var(--purple); background: #f3e5f5; color: var(--purple); }
+        .display-area { background: #f9fbe7; border: 2px dashed var(--primary); border-radius: 1rem; padding: 1rem; margin: 10px 0; text-align: left; min-height: 100px; }
+        .item-row { display: flex; justify-content: space-between; font-size: 1.1rem; margin-bottom: 5px; }
+        .highlight-box { background: #fff8e1; padding: 12px; border-radius: 10px; font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; border: 1px solid #ffe082; color: #333; }
+        .shop-tag { display: inline-block; background: var(--blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 5px; }
+        input[type="number"] { width: 70%; padding: 10px; font-size: 1.8rem; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; text-align: center; }
+        .btn { width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; color: white; margin-top: 5px; }
         .btn-check { background: var(--primary); }
         .btn-next { background: var(--blue); display: none; }
-        
-        /* 分享按鈕樣式 */
-        .btn-share {
-            background: var(--line-green);
-            display: none; /* 預設隱藏，答對後顯示 */
-            margin-top: 10px;
-        }
-
-        .sound-toggle { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; border: none; background: none; cursor: pointer; }
-        .history-info { font-size: 1rem; color: #2e7d32; background: #e8f5e9; padding: 8px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; text-align: left; }
+        .btn-share { background: var(--line-green); display: none; margin-top: 10px; }
+        .sound-toggle { position: absolute; top: 10px; right: 10px; font-size: 1.4rem; border: none; background: none; cursor: pointer; }
+        .history-info { font-size: 1rem; color: #2e7d32; background: #e8f5e9; padding: 8px; border-radius: 5px; margin-bottom: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <h1 style="color: var(--primary); margin-bottom: 10px;">🎮 收銀王挑戰賽</h1>
-    <p style="color: #666;">輸入名稱開始練習：</p>
-    <input type="text" id="userNameInput" style="width: 80%; padding: 12px; font-size: 1.2rem; margin-bottom: 25px; border: 2px solid #ddd; border-radius: 8px;" placeholder="媽媽">
-    
-    <button class="social-btn google" onclick="fakeLogin()">
-        <img src="https://www.google.com/favicon.ico" width="18"> Google 登入挑戰
-    </button>
-    <button class="social-btn fb" onclick="fakeLogin()">
-        <span style="font-size: 1.2rem; font-family: sans-serif;">f</span> Facebook 登入挑戰
-    </button>
+    <h1 style="color: var(--primary); font-size: 1.8rem;">🎮 全能收銀王</h1>
+    <p>輸入挑戰者名稱：</p>
+    <input type="text" id="userNameInput" style="width: 80%; padding: 12px; font-size: 1.2rem; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px;" placeholder="媽媽">
+    <button class="social-btn google" onclick="fakeLogin()">Google 登入</button>
+    <button class="social-btn fb" onclick="fakeLogin()">Facebook 登入</button>
 </div>
 
 <div class="app-card" id="game-screen">
     <button class="sound-toggle" onclick="toggleMute()" id="muteBtn">🔊</button>
-    <div style="font-weight: bold; color: #666; margin-bottom: 8px;">挑戰者：<span id="displayName"></span></div>
+    
+    <div class="controls">
+        <div class="qty-row">
+            <span>📦 品項最多：</span>
+            <button class="qty-btn" onclick="adjustMaxItems(-1)">-</button>
+            <span id="maxItemDisplay" style="width: 20px;">2</span>
+            <button class="qty-btn" onclick="adjustMaxItems(1)">+</button>
+        </div>
+        <div class="mode-switch">
+            <button class="mode-btn" id="btn-calc" onclick="switchMode('calc')">加總練習</button>
+            <button class="mode-btn" id="btn-change" onclick="switchMode('change')">找零練習</button>
+            <button class="mode-btn active" id="btn-mixed" onclick="switchMode('mixed')">綜合進階</button>
+        </div>
+    </div>
 
-    <div class="stats-bar" style="display:flex; justify-content:space-around; background:#eee; padding:10px; border-radius:10px; margin-bottom:15px;">
+    <div style="font-weight: bold; color: #666; font-size: 0.9rem; margin-bottom: 5px;">挑戰者：<span id="displayName"></span></div>
+    
+    <div class="stats-bar" style="display:flex; justify-content:space-around; background:#eee; padding:8px; border-radius:10px; font-size: 0.9rem; font-weight: bold;">
         <span>🏆 積分: <span id="score">0</span></span>
         <span>🔥 連勝: <span id="combo">0</span></span>
         <span>⏳ <span id="seconds">0</span>s</span>
     </div>
 
+    <div id="shopNameArea"></div>
     <div class="display-area" id="displayArea"></div>
     <div id="historyContainer"></div>
     <div class="highlight-box" id="promptText"></div>
 
     <input type="number" id="ansInput" placeholder="?" autocomplete="off" inputmode="numeric">
-    <div id="msg" style="margin: 10px 0; font-weight: bold; min-height: 1.5rem;"></div>
+    <div id="msg" style="margin: 5px 0; font-weight: bold; min-height: 1.2rem;"></div>
     
     <button class="btn btn-check" id="checkBtn" onclick="verify()">送出答案</button>
     <button class="btn btn-next" id="nextBtn" onclick="initGame()">下一題 ➜</button>
-    
-    <button class="btn btn-share" id="shareBtn" onclick="shareToLine()">
-        📢 分享戰績給親戚
-    </button>
-
-    <div class="leaderboard">
-        <div class="leaderboard-title">🚩 本機最高榮譽</div>
-        <div id="leaderList" style="font-size: 0.9rem;">尚無紀錄</div>
-    </div>
+    <button class="btn btn-share" id="shareBtn" onclick="shareToLine()">📢 分享戰績給親戚</button>
 </div>
 
 <audio id="sndCorrect" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
 <audio id="sndWrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"></audio>
 
 <script>
-    let user = "";
-    let score = 0, combo = 0, seconds = 0, targetAnswer = 0, timerInterval;
-    let mixedStep = 1, mixedTotal = 0, mixedPaid = 0, isMuted = false;
+    let user = "", score = 0, combo = 0, seconds = 0, targetAnswer = 0, timerInterval;
+    let currentMode = 'mixed', maxItems = 2, mixedStep = 1, mixedTotal = 0, mixedPaid = 0, isMuted = false;
+
+    const shopThemes = [
+        { name: "🍜 麵食館", items: [ {n:"牛肉麵",p:130,v:20}, {n:"排骨麵",p:110,v:15}, {n:"小菜",p:40,v:10}, {n:"貢丸湯",p:35,v:5} ] },
+        { name: "🍳 早餐店", items: [ {n:"漢堡",p:55,v:10}, {n:"三明治",p:35,v:5}, {n:"奶茶",p:25,v:5}, {n:"蛋餅",p:30,v:5} ] },
+        { name: "🥤 飲料店", items: [ {n:"珍珠奶茶",p:60,v:10}, {n:"紅茶",p:30,v:5}, {n:"綠茶",p:30,v:5}, {n:"水果茶",p:75,v:15} ] },
+        { name: "✏️ 文具店", items: [ {n:"筆記本",p:45,v:10}, {n:"原子筆",p:15,v:5}, {n:"修正帶",p:55,v:10}, {n:"橡皮擦",p:10,v:2} ] },
+        { name: "🍗 炸雞攤", items: [ {n:"雞排",p:85,v:10}, {n:"甜不辣",p:30,v:5}, {n:"花枝丸",p:35,v:5}, {n:"四季豆",p:40,v:10} ] }
+    ];
 
     function fakeLogin() {
-        user = document.getElementById('userNameInput').value.trim() || "媽媽";
+        user = document.getElementById('userNameInput').value.trim() || "挑戰者";
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('game-screen').style.display = 'block';
         document.getElementById('displayName').innerText = user;
-        updateLeaderboard();
+        initGame();
+    }
+
+    function adjustMaxItems(v) {
+        maxItems = Math.max(1, Math.min(6, maxItems + v));
+        document.getElementById('maxItemDisplay').innerText = maxItems;
+        initGame();
+    }
+
+    function switchMode(m) {
+        currentMode = m;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + m).classList.add('active');
         initGame();
     }
 
@@ -156,12 +126,6 @@
         document.getElementById('muteBtn').innerText = isMuted ? "🔇" : "🔊";
     }
 
-    const products = [
-        { n: "牛肉麵", e: "🍜", p: 130 }, { n: "炸醬麵", e: "🍝", p: 100 },
-        { n: "燙青菜", e: "🥬", p: 40 }, { n: "滷味", e: "🍢", p: 65 },
-        { n: "鮮乳", e: "🥛", p: 90 }, { n: "雞排", e: "🍗", p: 85 }
-    ];
-
     function initGame() {
         clearInterval(timerInterval); seconds = 0; mixedStep = 1;
         document.getElementById('msg').innerText = '';
@@ -169,17 +133,51 @@
         document.getElementById('ansInput').disabled = false;
         document.getElementById('checkBtn').style.display = 'block';
         document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('shareBtn').style.display = 'none'; // 新題目隱藏分享
+        document.getElementById('shareBtn').style.display = 'none';
         document.getElementById('historyContainer').innerHTML = '';
-
-        const item = products[Math.floor(Math.random()*products.length)];
-        const qty = Math.floor(Math.random()*2) + 1;
-        mixedTotal = item.p * qty;
-        mixedPaid = mixedTotal > 500 ? 1000 : 500;
         
-        document.getElementById('displayArea').innerHTML = `<div class="item-row"><span>${item.e} ${item.n} ($${item.p})</span><span>x ${qty}</span></div>`;
-        document.getElementById('promptText').innerHTML = `請算出總價：`;
-        targetAnswer = mixedTotal;
+        const theme = shopThemes[Math.floor(Math.random()*shopThemes.length)];
+        document.getElementById('shopNameArea').innerHTML = `<span class="shop-tag">${theme.name}</span>`;
+        
+        const display = document.getElementById('displayArea');
+        display.innerHTML = '';
+        let total = 0;
+        const count = Math.floor(Math.random() * maxItems) + 1;
+
+        let selectedItems = [...theme.items].sort(() => 0.5 - Math.random()).slice(0, count);
+
+        selectedItems.forEach(item => {
+            const realPrice = item.p + (Math.floor(Math.random() * (item.v / 5 + 1)) * 5);
+            // 修正處：找零練習現在也會隨機 1-3 倍數量 (如果是綜合模式則更廣)
+            const q = (Math.floor(Math.random() * 3) + 1); 
+            display.innerHTML += `<div class="item-row"><span>${item.n} ($${realPrice})</span><span>x ${q}</span></div>`;
+            total += (realPrice * q);
+        });
+
+        if (currentMode === 'calc') {
+            document.getElementById('promptText').innerText = `總共多少錢？`;
+            targetAnswer = total;
+        } else {
+            let paid = 0;
+            if (total <= 100) paid = 100;
+            else if (total <= 500) paid = 500;
+            else paid = 1000;
+            // 確保顧客付的錢一定比總價多
+            while (paid < total) {
+                paid += 500;
+            }
+
+            if (currentMode === 'change') {
+                display.innerHTML += `<div style="text-align:right; font-weight:bold; color:red; border-top:1px solid #ccc;">應收 $${total}</div>`;
+                document.getElementById('promptText').innerText = `客付 ${paid}，找多少？`;
+                targetAnswer = paid - total;
+            } else {
+                mixedTotal = total;
+                mixedPaid = paid;
+                document.getElementById('promptText').innerText = `Step 1: 先算總價`;
+                targetAnswer = mixedTotal;
+            }
+        }
 
         timerInterval = setInterval(() => { seconds++; document.getElementById('seconds').innerText = seconds; }, 1000);
         document.getElementById('ansInput').focus();
@@ -189,16 +187,16 @@
         const val = parseInt(document.getElementById('ansInput').value);
         if(isNaN(val)) return;
 
-        if (mixedStep === 1) {
+        if (currentMode === 'mixed' && mixedStep === 1) {
             if (val === targetAnswer) {
                 if(!isMuted) document.getElementById('sndCorrect').play();
                 mixedStep = 2;
                 document.getElementById('historyContainer').innerHTML = `<div class="history-info">✅ 總價確認：$${mixedTotal}</div>`;
                 document.getElementById('ansInput').value = '';
-                document.getElementById('promptText').innerHTML = `顧客付了 ${mixedPaid}，要找多少？`;
+                document.getElementById('promptText').innerText = `Step 2: 客付 ${mixedPaid} 找多少？`;
                 targetAnswer = mixedPaid - mixedTotal;
                 document.getElementById('ansInput').focus();
-            } else { fail(); }
+            } else fail();
         } else {
             if(val === targetAnswer) success(); else fail();
         }
@@ -208,8 +206,7 @@
         if(!isMuted) document.getElementById('sndCorrect').play();
         score++; combo++;
         document.getElementById('msg').style.color = "green";
-        document.getElementById('msg').innerText = "✅ 太棒了！算對了！";
-        saveRecord(score);
+        document.getElementById('msg').innerText = "✅ 正確！";
         finishRound();
     }
 
@@ -217,7 +214,7 @@
         if(!isMuted) document.getElementById('sndWrong').play();
         combo = 0;
         document.getElementById('msg').style.color = "red";
-        document.getElementById('msg').innerText = `❌ 不對喔，正確答案是 ${targetAnswer}`;
+        document.getElementById('msg').innerText = `❌ 答案是 ${targetAnswer}`;
         finishRound();
     }
 
@@ -228,30 +225,12 @@
         document.getElementById('ansInput').disabled = true;
         document.getElementById('checkBtn').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'block';
-        document.getElementById('shareBtn').style.display = 'block'; // 顯示分享按鈕
+        document.getElementById('shareBtn').style.display = 'block';
     }
 
-    function saveRecord(s) {
-        let history = JSON.parse(localStorage.getItem('cashierRecords') || "[]");
-        history.push({ name: user, score: s, date: new Date().toLocaleDateString() });
-        history.sort((a, b) => b.score - a.score);
-        localStorage.setItem('cashierRecords', JSON.stringify(history.slice(0, 5)));
-        updateLeaderboard();
-    }
-
-    function updateLeaderboard() {
-        const history = JSON.parse(localStorage.getItem('cashierRecords') || "[]");
-        const list = document.getElementById('leaderList');
-        if(history.length === 0) return;
-        list.innerHTML = history.map((r, i) => `<div>#${i+1} ${r.name} - ${r.score}題</div>`).join('');
-    }
-
-    // 分享到 LINE 的功能
     function shareToLine() {
-        const url = window.location.href;
-        const text = `我是收銀王 ${user}！我剛才連續答對了 ${score} 題！🔥 你敢來挑戰我嗎？練習找錢連結：${url}`;
-        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
-        window.open(lineUrl, '_blank');
+        const text = `我是收銀王 ${user}！連續答對 ${score} 題！🔥 你敢挑戰嗎？${window.location.href}`;
+        window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text)}`, '_blank');
     }
 </script>
 </body>
